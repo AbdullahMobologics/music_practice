@@ -1,6 +1,8 @@
 import 'package:audio_service/audio_service.dart';
+import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_seekbar/flutter_seekbar.dart';
 import 'package:music_for_prac/main.dart';
 import 'package:rxdart/rxdart.dart';
 
@@ -48,19 +50,17 @@ class MainScreen extends StatelessWidget {
               },
             ),
             // A seek bar.
-            // StreamBuilder<MediaState>(
-            //   stream: _mediaStateStream,
-            //   builder: (context, snapshot) {
-            //     final mediaState = snapshot.data;
-            //     return SeekBar(
-            //       duration: mediaState?.mediaItem?.duration ?? Duration.zero,
-            //       position: mediaState?.position ?? Duration.zero,
-            //       onChangeEnd: (newPosition) {
-            //         audioHandler.seek(newPosition);
-            //       },
-            //     );
-            //   },
-            // ),
+            StreamBuilder<MediaState>(
+              stream: _mediaStateStream,
+              builder: (context, snapshot) {
+                final mediaState = snapshot.data;
+                return ProgressBar(
+                  progress: mediaState?.position ?? Duration.zero,
+                  total: mediaState?.mediaItem?.duration ?? Duration.zero,
+                  onSeek: (duration) {},
+                );
+              },
+            ),
             // Display the processing state.
             StreamBuilder<AudioProcessingState>(
               stream: audioHandler.playbackState
